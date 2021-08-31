@@ -3,41 +3,29 @@
     class Eggs {
 
         private int $noOfEggs = 5;
-        private int $computerEggs = 5;
-        private array $yourTypesOfEggs = ["A", "C"];
+        private int $noOfComputerEggs = 5;
+        private array $typesOfEggs = ["A", "C"];
         public array $eggs = [];
-        public string $player;
+        public array $computerEggs = [];
         public int $playerBrokenSides = 0;
         public int $computerBrokenSides = 0;
 
         public function getEggs(): int {
-            return $this->noOfEggs;
+            return count($this->eggs);
         }
 
         public function getComputerEggs(): int {
-            return $this->computerEggs;
+            return count($this->computerEggs);
         }
-
-        public function setLosingEggs(){
-            $this->noOfEggs--;
-        }
-
-        public function setWinningEggs(){
-            $this->noOfEggs++;
-        }
-
-        public function setLosingComputerEggs(){
-            $this->computerEggs--;
-        }
-
-        public function setWinningComputerEggs(){
-            $this->computerEggs++;
-        }
-
+        
         public function giveEggs() {
 
             for($i = 0; $i < $this->noOfEggs; $i++){
-                $this->eggs[] = $this->yourTypesOfEggs[array_rand($this->yourTypesOfEggs)];
+                $this->eggs[] = $this->typesOfEggs[array_rand($this->typesOfEggs)];
+            }
+
+            for($i = 0; $i < $this->noOfComputerEggs; $i++){
+                $this->computerEggs[] = $this->typesOfEggs[array_rand($this->typesOfEggs)];
             }
 
         }
@@ -47,7 +35,7 @@
         }
 
         public function gameOver(){
-            if($this->noOfEggs === 0 || $this->computerEggs === 0){
+            if($this->noOfEggs === 0 || $this->noOfComputerEggs === 0){
                 die("Game over!");
             }
         }
@@ -58,6 +46,7 @@
 
         private Eggs $eggs;
         Public int $chanceToWin = 50;
+        Public int $chanceComputerWin = 50;
 
         public function __construct(Eggs $eggs){
             $this->eggs = $eggs;
@@ -68,16 +57,24 @@
         }
 
         public function findWinner(): int {
-            return rand(1, 100);
+            return rand(1, $this->chanceToWin+$this->chanceComputerWin);
         }
 
-        public function checkEggStrength() {
-            if($this->eggs->player === "C") {
+        public function checkEggStrength(string $yourEgg, string $computersEgg) {
+            if($yourEgg === "C") {
                 $this->chanceToWin = 70;
             }
-            if($this->eggs->player === "A") {
+            if($yourEgg === "A") {
                 $this->chanceToWin = 50;
             }
+
+            if($computersEgg === "C") {
+                $this->chanceComputerWin = 70;
+            }
+            if($computersEgg === "A") {
+                $this->chanceComputerWin = 50;
+            }
+
         }
 
     }
@@ -92,6 +89,12 @@
         echo "You have {$eggs->getEggs()} eggs!\n";
         echo "Computer has {$eggs->getComputerEggs()} eggs!\n";
         var_dump($eggs->eggs);
+        var_dump($eggs->computerEggs);
+        $yourEgg = array_shift($eggs->eggs);
+        $computersEgg = array_shift($eggs->computerEggs);
+
+        var_dump($yourEgg);
+        var_dump($computersEgg);
 
         $selection = readline("Do you want to play? (Y/N) ");
         switch(strtoupper($selection)){
@@ -101,26 +104,21 @@
                 die("Bye");
         }
 
-        $eggs->giveEggs();
-        $game->checkEggStrength();
+        $game->checkEggStrength($yourEgg, $computersEgg);
 
-        $winner = $game->findWinner();
+        $valueForWinner = $game->findWinner();
 
         if($eggs->playerBrokenSides === 1 && $eggs->computerBrokenSides === 1){
-            $eggs->setLosingEggs();
-            $eggs->setLosingComputerEggs();
             echo "You both lost your eggs!";
         }
 
-        if($winner < $game->getChanceToWin()){
-            $eggs->setWinningEggs();
-            $eggs->setLosingComputerEggs();
+        if($valueForWinner <= $game->getChanceToWin()){
+            $eggs->eggs[] = $yourEgg;
             echo "Congratulations! You won!\n";
         }
 
-        if($winner > $game->getChanceToWin()){
-            $eggs->setLosingEggs();
-            $eggs->setWinningComputerEggs();
+        if($valueForWinner > $game->getChanceToWin()){
+            $eggs->computerEggs[] = $computersEgg;
             echo "Computer won!\n";
         }
         $eggs->gameOver();
