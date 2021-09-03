@@ -134,30 +134,30 @@
         echo "You have type '$yourEgg' egg!\n";
         echo "Computer has type '$yourEgg' egg!\n\n";
         echo "$yourEgg ({$eggs->getPlayerBrokenSides()}) egg VS $computersEgg ({$eggs->getComputerBrokenSides()}) egg\n";
-        echo "FIGHTING\n";
+        echo "\e[31mFIGHTING\e[0m\n";
         usleep(2000000);
 
         if($valueForWinner <= $game->getChanceToWin()){
             $eggs->setComputerBrokenSides(1);
-            echo "\nYou hit computers egg!\n";
+            echo "\n\e[32mYou hit computers egg!\e[0m\n";
             echo "$yourEgg ({$eggs->getPlayerBrokenSides()}) egg VS $computersEgg ({$eggs->getComputerBrokenSides()}) egg\n";
             if($eggs->getComputerBrokenSides() === 2){
                 $eggs->setComputerBrokenSides(-2);
                 $eggs->addEgg($computersEgg);
                 $eggs->removeComputerEgg();
-                echo "Congratulations! You won!\n";
+                echo "\e[32mCongratulations! You won!\e[0m\n";
             }
         }
 
         if($valueForWinner > $game->getChanceToWin()){
             $eggs->setPlayerBrokenSides(1);
-            echo "\nComputer hit your egg!\n";
+            echo "\n\e[31mComputer hit your egg!\e[0m\n";
             echo "$yourEgg ({$eggs->getPlayerBrokenSides()}) egg VS $computersEgg ({$eggs->getComputerBrokenSides()}) egg\n";
             if($eggs->getPlayerBrokenSides() === 2){
                 $eggs->setPlayerBrokenSides(-2);
                 $eggs->addComputersEgg($yourEgg);
                 $eggs->removeEgg();
-                echo "Computer won!\n";
+                echo "\e[31mComputer won!\e[0m\n";
             }
         }
 
@@ -166,7 +166,7 @@
             $eggs->setPlayerBrokenSides(-1);
             $eggs->removeEgg();
             $eggs->removeComputerEgg();
-            echo "You both have 1 broken side on the egg. It's a tie!\n";
-            echo "You both lost your eggs!\n";
+            echo "\e[33mYou both have 1 broken side on the egg. It's a tie!\e[0m\n";
+            echo "\e[33mYou both lost your eggs!\e[0m\n";
         }
     }
