@@ -64,15 +64,15 @@
 
         public function gameOver(): void {
             if($this->noOfEggs === 0 && $this->noOfComputerEggs === 0){
-                die("Game over! You both lost!");
+                die("\e33mGame over! You both lost!\e[0m");
             }
 
             if($this->noOfEggs === 0){
-                die("Game over! Computer won!");
+                die("\e[31mGame over! Computer won!\e[0m");
             }
 
             if($this->noOfComputerEggs === 0){
-                die("Game over! You won!");
+                die("\e[32mGame over! You won!\e[0m");
             }
 
         }
@@ -124,7 +124,7 @@
             case "":
                 break;
             case "N":
-                die("Bye");
+                die("Bye. You left with {$eggs->getEggs()} eggs!");
         }
 
         $game->checkEggStrength($yourEgg, $computersEgg);
