@@ -119,11 +119,11 @@
         $yourEgg = $eggs->eggs[0];
         $computersEgg = $eggs->computerEggs[0];
 
-        $selection = readline("Press ENTER to play, type N to exit program! ");
+        $selection = readline("Press ENTER to play, type Q to exit program! ");
         switch(strtoupper($selection)){
             case "":
                 break;
-            case "N":
+            case "Q":
                 die("Bye. You left with {$eggs->getEggs()} eggs!");
         }
 
